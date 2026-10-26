@@ -1,0 +1,33 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: driving-license-portal
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: driving-license-portal
+  template:
+    metadata:
+      labels:
+        app: driving-license-portal
+    spec:
+      containers:
+        - name: driving-license-portal
+          image: driving-license-portal:v2
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5000
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 15
+            periodSeconds: 20

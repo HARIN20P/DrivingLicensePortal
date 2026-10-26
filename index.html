@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RoadReady – Driving License Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700;800&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1c2226;--road:#252c30;--paper:#f5f6f3;--card:#fff;--line:#dde1db;--sign:#0d6b4d;--sign-d:#0a5239;--mark:#f4b400;--muted:#5c676d;--bad:#b3261e;
+--display:'Sora',system-ui,sans-serif;--body:'Figtree',system-ui,sans-serif}
+*{box-sizing:border-box;margin:0}
+html{scroll-behavior:smooth}
+body{font:16px/1.6 var(--body);color:var(--ink);background:var(--paper)}
+h1,h2,h3{font-family:var(--display);line-height:1.15;letter-spacing:-.01em}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--mark);outline-offset:2px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+/* header */
+header{background:var(--road);color:#fff;position:sticky;top:0;z-index:20}
+.bar{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
+.brand{font:800 20px var(--display);text-decoration:none;display:flex;align-items:center;gap:10px}
+.brand i{width:28px;height:28px;border-radius:7px;background:var(--mark);display:grid;place-items:center}
+.brand i:after{content:"";width:4px;height:16px;background:repeating-linear-gradient(var(--road) 0 5px,transparent 5px 8px)}
+nav{display:flex;gap:4px}
+nav a{padding:8px 12px;border-radius:8px;text-decoration:none;font-weight:500;font-size:15px;color:#d5dbd8}
+nav a:hover{background:#ffffff1a;color:#fff}
+.btn{font:600 15px var(--body);border:0;border-radius:10px;padding:11px 20px;cursor:pointer;background:var(--sign);color:#fff;transition:background .15s}
+.btn:hover{background:var(--sign-d)}
+.btn.alt{background:var(--mark);color:var(--ink)}
+.btn.alt:hover{background:#e0a600}
+.btn.ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+.btn.ghost:hover{background:#eef0ec}
+.menu{display:none;background:none;border:0;color:#fff;font-size:26px;cursor:pointer}
+/* hero */
+.hero{background:var(--road);color:#fff;padding:56px 0 80px;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;left:0;right:0;bottom:22px;height:6px;background:repeating-linear-gradient(90deg,var(--mark) 0 40px,transparent 40px 72px);opacity:.9}
+.hero .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center}
+.hero h1{font-size:clamp(34px,5vw,54px);font-weight:800}
+.hero p{color:#c3cbc8;margin:18px 0 28px;max-width:46ch;font-size:18px}
+.cta{display:flex;gap:12px;flex-wrap:wrap}
+.hero .ghost{color:#fff;border-color:#ffffff55}
+.hero .ghost:hover{background:#ffffff1a}
+/* license card */
+.dl{background:linear-gradient(135deg,#f7f8f4,#e4e9e1);color:var(--ink);border-radius:18px;padding:20px;box-shadow:0 20px 50px #0007;max-width:420px;margin-left:auto;width:100%;transform:rotate(-2deg);transition:transform .3s}
+.dl:hover{transform:rotate(0)}
+.dl-top{display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid var(--sign);padding-bottom:10px;margin-bottom:14px;font:700 13px var(--display)}
+.dl-top b{color:var(--sign)}
+.dl-main{display:grid;grid-template-columns:96px 1fr;gap:16px}
+.ph{width:96px;height:118px;border-radius:10px;background:#c9d1c7 center/cover no-repeat;display:grid;place-items:center;color:#7d897f;font-size:38px;overflow:hidden}
+.dl dl{display:grid;gap:6px;font-size:14px}
+.dl dt{font-size:11px;color:var(--muted);line-height:1}
+.dl dd{font-weight:600;min-height:1.3em;word-break:break-word}
+.dl-no{margin-top:14px;display:flex;justify-content:space-between;font:600 14px var(--display);letter-spacing:.06em}
+/* sections */
+section{padding:64px 0}
+.title{margin-bottom:28px}
+.title h2{font-size:clamp(26px,3.5vw,36px)}
+.title p{color:var(--muted);margin-top:8px;max-width:60ch}
+.tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:-52px;position:relative;z-index:2}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;text-align:left;cursor:pointer;font:inherit;color:inherit;transition:border-color .15s,transform .15s}
+.tile:hover{border-color:var(--sign);transform:translateY(-3px)}
+.tile .ic{font-size:26px;display:block;margin-bottom:10px}
+.tile b{font:700 17px var(--display);display:block}
+.tile span:last-child{color:var(--muted);font-size:14px}
+/* workspace */
+.panel{background:var(--card);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+.tabs{display:flex;border-bottom:1px solid var(--line);overflow-x:auto;background:#fafbf9}
+.tabs button{flex:1;min-width:130px;padding:16px;border:0;background:none;font:600 15px var(--body);color:var(--muted);cursor:pointer;border-bottom:3px solid transparent}
+.tabs button[aria-selected=true]{color:var(--sign);border-color:var(--sign);background:#fff}
+.tp{padding:32px;display:none}
+.tp.on{display:block}
+.split{display:grid;grid-template-columns:1fr 360px;gap:36px}
+.steps{display:flex;gap:8px;margin-bottom:24px}
+.steps span{flex:1;height:6px;border-radius:3px;background:var(--line)}
+.steps span.done{background:var(--sign)}
+.sl{font:600 14px var(--body);color:var(--muted);margin-bottom:18px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.f{display:flex;flex-direction:column;gap:6px;margin-bottom:16px}
+.f.full{grid-column:1/-1}
+label{font-weight:600;font-size:14px}
+input,select,textarea{font:inherit;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;background:#fff;width:100%}
+input:focus,select:focus{border-color:var(--sign);outline:none;box-shadow:0 0 0 3px #0d6b4d26}
+.err{color:var(--bad);font-size:13px;min-height:1em}
+input.bad,select.bad{border-color:var(--bad)}
+.hint{font-size:13px;color:var(--muted)}
+.row{display:flex;gap:12px;margin-top:8px;flex-wrap:wrap}
+.review{display:grid;grid-template-columns:1fr 1fr;gap:10px 20px;background:#f5f6f3;border-radius:12px;padding:20px;margin-bottom:20px}
+.review div{font-size:14px}.review b{display:block;font-size:12px;color:var(--muted);font-weight:500}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:14px;margin-bottom:10px}
+.check input{width:auto;margin-top:4px}
+.ok{text-align:center;padding:20px 0}
+.ok .big{font-size:52px}
+.ref{display:inline-block;background:#fff6d6;border:2px dashed var(--mark);border-radius:10px;padding:10px 20px;font:700 22px var(--display);letter-spacing:.08em;margin:14px 0}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px}
+.slots button{padding:10px;border:1.5px solid var(--line);background:#fff;border-radius:10px;cursor:pointer;font:600 14px var(--body)}
+.slots button[aria-pressed=true]{background:var(--sign);color:#fff;border-color:var(--sign)}
+.slots button:disabled{opacity:.4;text-decoration:line-through;cursor:not-allowed}
+.fee{background:#f5f6f3;border-radius:12px;padding:16px 20px;display:flex;justify-content:space-between;font:700 18px var(--display);margin:6px 0 18px}
+.tl{list-style:none;padding:0;margin:24px 0 0;border-left:3px solid var(--line);margin-left:10px}
+.tl li{position:relative;padding:0 0 22px 28px;color:var(--muted)}
+.tl li:before{content:"";position:absolute;left:-11px;top:3px;width:19px;height:19px;border-radius:50%;background:#fff;border:3px solid var(--line)}
+.tl li.d{color:var(--ink)}.tl li.d:before{background:var(--sign);border-color:var(--sign)}
+.tl li.c:before{border-color:var(--mark);background:var(--mark);box-shadow:0 0 0 5px #f4b4002e}
+.tl li.c{color:var(--ink);font-weight:600}
+.tl small{display:block;font-weight:400;color:var(--muted)}
+/* info */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px}
+.box h3{font-size:20px;margin-bottom:14px}
+table{width:100%;border-collapse:collapse;font-size:15px}
+td,th{padding:11px 4px;border-bottom:1px solid var(--line);text-align:left}
+td:last-child,th:last-child{text-align:right;font-weight:600}
+th{font-size:13px;color:var(--muted);font-weight:500}
+.docs label{font-weight:400;display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);cursor:pointer}
+.docs input{width:auto}
+.docs input:checked+span{text-decoration:line-through;color:var(--muted)}
+.prog{height:8px;background:var(--line);border-radius:4px;margin-top:14px;overflow:hidden}.prog i{display:block;height:100%;background:var(--sign);width:0;transition:width .3s}
+details{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;padding:16px 20px}
+summary{font-weight:600;cursor:pointer}
+details p{color:var(--muted);margin-top:10px}
+footer{background:var(--road);color:#aeb8b5;padding:36px 0;font-size:14px}
+footer .wrap{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+/* dialog + toast */
+dialog{border:0;border-radius:18px;padding:30px;width:min(400px,92vw);box-shadow:0 30px 80px #0006}
+dialog::backdrop{background:#0009}
+dialog h3{margin-bottom:6px}
+#toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,120px);background:var(--ink);color:#fff;padding:13px 22px;border-radius:12px;transition:transform .3s;z-index:50;font-weight:500}
+#toast.show{transform:translate(-50%,0)}
+@media(max-width:900px){
+.hero .wrap,.split,.two{grid-template-columns:1fr}.dl{margin:0 auto}.tiles{grid-template-columns:1fr 1fr}
+nav{display:none;position:absolute;top:64px;left:0;right:0;background:var(--road);flex-direction:column;padding:10px 20px 18px}nav.open{display:flex}.menu{display:block}
+.tp{padding:22px 18px}.grid2,.review{grid-template-columns:1fr}}
+@media(max-width:520px){.tiles{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="wrap bar">
+  <a class="brand" href="#top"><i></i>RoadReady</a>
+  <nav id="nav" aria-label="Main">
+   <a href="#services">Services</a><a href="#portal" data-go="apply">Apply</a><a href="#portal" data-go="track">Track status</a><a href="#fees">Fees &amp; documents</a><a href="#help">Help</a>
+  </nav>
+  <button class="btn alt" id="signBtn">Sign in</button>
+  <button class="menu" id="menu" aria-label="Open menu">☰</button>
+ </div>
+</header>
+
+<main id="top">
+<div class="hero">
+ <div class="wrap">
+  <div>
+   <h1>Your driving license, handled online.</h1>
+   <p>Apply for a new license, renew an existing one, book your driving test and track every step from one place.</p>
+   <div class="cta">
+    <button class="btn alt" data-go="apply">Start an application</button>
+    <button class="btn ghost" data-go="track">Track my application</button>
+   </div>
+  </div>
+  <div class="dl" aria-label="License preview that updates as you fill in the form">
+   <div class="dl-top"><span>Driving license</span><b id="c-class">Class –</b></div>
+   <div class="dl-main">
+    <div class="ph" id="c-photo">👤</div>
+    <dl>
+     <div><dt>Name</dt><dd id="c-name">Your name here</dd></div>
+     <div><dt>Date of birth</dt><dd id="c-dob">–</dd></div>
+     <div><dt>Blood group</dt><dd id="c-blood">–</dd></div>
+    </dl>
+   </div>
+   <div class="dl-no"><span id="c-no">DL-0000-0000</span><span>Valid 20 yrs</span></div>
+  </div>
+ </div>
+</div>
+
+<div class="wrap" id="services">
+ <div class="tiles">
+  <button class="tile" data-go="apply"><span class="ic">🪪</span><b>New license</b><span>Apply in three short steps</span></button>
+  <button class="tile" data-go="renew"><span class="ic">🔄</span><b>Renew license</b><span>Extend before it expires</span></button>
+  <button class="tile" data-go="test"><span class="ic">🚗</span><b>Book a driving test</b><span>Pick a date, centre and time</span></button>
+  <button class="tile" data-go="track"><span class="ic">📍</span><b>Track application</b><span>See where your license is</span></button>
+ </div>
+</div>
+
+<section id="portal">
+ <div class="wrap">
+  <div class="title"><h2>What would you like to do?</h2><p>Everything runs in your browser. Applications are saved on this device so you can track them later.</p></div>
+  <div class="panel">
+   <div class="tabs" role="tablist">
+    <button role="tab" data-tab="apply" aria-selected="true">New license</button>
+    <button role="tab" data-tab="renew" aria-selected="false">Renew</button>
+    <button role="tab" data-tab="test" aria-selected="false">Book test</button>
+    <button role="tab" data-tab="track" aria-selected="false">Track status</button>
+   </div>
+
+   <!-- APPLY -->
+   <div class="tp on" id="tp-apply">
+    <div class="split">
+     <div>
+      <div class="steps" id="steps"><span class="done"></span><span></span><span></span></div>
+      <p class="sl" id="stepLabel">Step 1 of 3: Personal details</p>
+      <form id="appForm" novalidate>
+       <div class="s" data-s="1">
+        <div class="grid2">
+         <div class="f full"><label for="name">Full name</label><input id="name" data-bind="c-name" autocomplete="name" placeholder="As on your ID proof" required><span class="err"></span></div>
+         <div class="f"><label for="dob">Date of birth</label><input id="dob" type="date" required><span class="err"></span></div>
+         <div class="f"><label for="gender">Gender</label><select id="gender" required><option value="">Select</option><option>Female</option><option>Male</option><option>Other</option></select><span class="err"></span></div>
+         <div class="f"><label for="blood">Blood group</label><select id="blood" required><option value="">Select</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select><span class="err"></span></div>
+         <div class="f"><label for="photo">Passport-size photo</label><input id="photo" type="file" accept="image/*"><span class="hint">Optional. Shown on your preview card.</span></div>
+        </div>
+       </div>
+       <div class="s" data-s="2" hidden>
+        <div class="grid2">
+         <div class="f"><label for="class">License class</label><select id="class" required><option value="">Select</option><option value="MC|16">Motorcycle (age 16+)</option><option value="LMV|18">Light motor vehicle / car (age 18+)</option><option value="HMV|21">Heavy / commercial vehicle (age 21+)</option></select><span class="err"></span></div>
+         <div class="f"><label for="phone">Mobile number</label><input id="phone" type="tel" inputmode="numeric" placeholder="10-digit number" required><span class="err"></span></div>
+         <div class="f full"><label for="email">Email</label><input id="email" type="email" autocomplete="email" placeholder="you@example.com" required><span class="err"></span></div>
+         <div class="f full"><label for="addr">Residential address</label><input id="addr" autocomplete="street-address" required><span class="err"></span></div>
+        </div>
+       </div>
+       <div class="s" data-s="3" hidden>
+        <div class="review" id="review"></div>
+        <label class="check"><input type="checkbox" id="agree"><span>I confirm the details are correct and I will carry original documents to my verification visit.</span></label>
+        <span class="err" id="agreeErr"></span>
+       </div>
+       <div class="row">
+        <button type="button" class="btn ghost" id="back" hidden>Back</button>
+        <button type="button" class="btn" id="next">Continue</button>
+       </div>
+      </form>
+      <div class="ok" id="applyOk" hidden>
+       <div class="big">✅</div><h3>Application submitted</h3>
+       <div class="ref" id="applyRef"></div>
+       <p class="hint">Save this number. You need it to track your application.</p>
+       <div class="row" style="justify-content:center"><button class="btn" id="copyRef">Copy number</button><button class="btn ghost" data-go="test">Book driving test</button></div>
+      </div>
+     </div>
+     <aside>
+      <h3 style="font-size:18px;margin-bottom:12px">Before you start</h3>
+      <p class="hint" style="margin-bottom:12px">Keep these handy. You do not upload them now, only bring them to verification.</p>
+      <ul style="padding-left:18px;font-size:15px;display:grid;gap:6px"><li>Proof of age (birth certificate or school certificate)</li><li>Proof of address</li><li>Medical fitness form (for commercial classes)</li><li>Two recent passport-size photos</li></ul>
+     </aside>
+    </div>
+   </div>
+
+   <!-- RENEW -->
+   <div class="tp" id="tp-renew">
+    <div style="max-width:520px">
+     <form id="renewForm" novalidate>
+      <div class="f"><label for="rno">License number</label><input id="rno" placeholder="e.g. DL-1234-5678" required><span class="err"></span></div>
+      <div class="f"><label for="rdob">Date of birth</label><input id="rdob" type="date" required><span class="err"></span></div>
+      <div class="f"><label for="ryears">Renew for</label><select id="ryears"><option value="1">1 year</option><option value="5" selected>5 years</option><option value="10">10 years</option></select></div>
+      <div class="fee"><span>Renewal fee</span><span id="rfee"></span></div>
+      <button class="btn" type="submit">Renew license</button>
+     </form>
+     <div class="ok" id="renewOk" hidden><div class="big">✅</div><h3>Renewal request received</h3><div class="ref" id="renewRef"></div><p class="hint">Your renewed license will be processed in 5–7 working days. Use this number to track it.</p></div>
+    </div>
+   </div>
+
+   <!-- TEST -->
+   <div class="tp" id="tp-test">
+    <div style="max-width:640px">
+     <form id="testForm" novalidate>
+      <div class="grid2">
+       <div class="f"><label for="tapp">Application or license number</label><input id="tapp" required><span class="err"></span></div>
+       <div class="f"><label for="tcentre">Test centre</label><select id="tcentre"><option>Central driving centre</option><option>North test track</option><option>South test track</option><option>East regional office</option></select></div>
+       <div class="f"><label for="tdate">Date</label><input id="tdate" type="date" required><span class="err"></span></div>
+       <div class="f"><label>Vehicle</label><select id="tveh"><option>Own vehicle</option><option>Centre vehicle</option></select></div>
+      </div>
+      <label style="display:block;margin:4px 0 8px">Time slot</label>
+      <div class="slots" id="slots"></div><span class="err" id="slotErr"></span>
+      <div class="row"><button class="btn" type="submit">Confirm booking</button></div>
+     </form>
+     <div class="ok" id="testOk" hidden><div class="big">📅</div><h3>Test booked</h3><p id="testMsg" style="margin-top:8px"></p><p class="hint" style="margin-top:10px">Arrive 20 minutes early with your original ID and learner permit.</p></div>
+    </div>
+   </div>
+
+   <!-- TRACK -->
+   <div class="tp" id="tp-track">
+    <div style="max-width:560px">
+     <form id="trackForm" class="row" style="align-items:flex-end;margin:0" novalidate>
+      <div class="f" style="flex:1;margin:0;min-width:220px"><label for="tid">Application number</label><input id="tid" placeholder="e.g. DL48210937" required></div>
+      <button class="btn" type="submit">Check status</button>
+     </form>
+     <span class="err" id="trackErr"></span>
+     <div id="trackOut"></div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section id="fees" style="padding-top:0">
+ <div class="wrap two">
+  <div class="box">
+   <h3>Fees</h3>
+   <table><thead><tr><th>Service</th><th>Fee</th></tr></thead><tbody id="feeBody"></tbody></table>
+   <p class="hint" style="margin-top:12px">Sample fees. Replace them in the FEES object at the top of the script.</p>
+  </div>
+  <div class="box docs">
+   <h3>Document checklist</h3>
+   <label><input type="checkbox"><span>Proof of age</span></label>
+   <label><input type="checkbox"><span>Proof of address</span></label>
+   <label><input type="checkbox"><span>Learner permit (if applicable)</span></label>
+   <label><input type="checkbox"><span>Medical fitness certificate</span></label>
+   <label><input type="checkbox"><span>Two passport-size photos</span></label>
+   <div class="prog"><i id="docBar"></i></div><p class="hint" id="docTxt" style="margin-top:6px">0 of 5 ready</p>
+  </div>
+ </div>
+</section>
+
+<section id="help" style="padding-top:0">
+ <div class="wrap" style="max-width:780px">
+  <div class="title"><h2>Common questions</h2></div>
+  <details><summary>How long does a new license take?</summary><p>After your documents and test are cleared, printing and delivery usually take 7 to 14 working days.</p></details>
+  <details><summary>Can I change my details after submitting?</summary><p>Contact your licensing office with your application number. Changes are possible until documents are verified.</p></details>
+  <details><summary>What if I fail the driving test?</summary><p>You can rebook after a waiting period. A re-test fee applies.</p></details>
+  <details><summary>When should I renew?</summary><p>Renew up to a few months before expiry. Late renewal may need a fresh test and extra fees.</p></details>
+ </div>
+</section>
+</main>
+
+<footer><div class="wrap"><div><b style="color:#fff">RoadReady</b><br>A demo driving license portal.</div><div>Help line: 1800-000-000 · help@roadready.example</div></div></footer>
+
+<dialog id="dlg">
+ <h3>Sign in</h3><p class="hint" style="margin-bottom:16px">Demo sign-in. No data leaves your device.</p>
+ <form method="dialog" id="signForm">
+  <div class="f"><label for="sn">Your name</label><input id="sn" required></div>
+  <div class="f"><label for="sp">Password</label><input id="sp" type="password" required></div>
+  <div class="row"><button class="btn" value="ok">Sign in</button><button class="btn ghost" value="cancel" formnovalidate>Cancel</button></div>
+ </form>
+</dialog>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+const FEES={"Learner permit":"350","New license":"700","Renewal (per year)":"100","Driving test":"300","Duplicate copy":"250"};
+const STAGES=["Application submitted","Documents verified","Driving test cleared","License printed","Out for delivery"];
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const store={get(k){try{return JSON.parse(localStorage.getItem(k))||[]}catch(e){return[]}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const toast=m=>{const t=$('#toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2600)};
+const uid=p=>p+String(Date.now()).slice(-8);
+
+/* fees table */
+$('#feeBody').innerHTML=Object.entries(FEES).map(([k,v])=>`<tr><td>${k}</td><td>${v}</td></tr>`).join('');
+
+/* nav + tabs */
+$('#menu').onclick=()=>$('#nav').classList.toggle('open');
+function go(tab){
+  $$('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.tab===tab));
+  $$('.tp').forEach(p=>p.classList.toggle('on',p.id==='tp-'+tab));
+  $('#nav').classList.remove('open');
+  $('#portal').scrollIntoView();
+}
+$$('[data-tab]').forEach(b=>b.onclick=()=>go(b.dataset.tab));
+$$('[data-go]').forEach(b=>b.addEventListener('click',e=>{if(b.tagName==='A')e.preventDefault();go(b.dataset.go)}));
+
+/* helpers */
+const bad=(el,msg)=>{el.classList.add('bad');const e=el.parentElement.querySelector('.err');if(e)e.textContent=msg;return false};
+const clear=el=>{el.classList.remove('bad');const e=el.parentElement.querySelector('.err');if(e)e.textContent=''};
+$$('input,select').forEach(el=>el.addEventListener('input',()=>clear(el)));
+const age=d=>{const b=new Date(d),n=new Date();let a=n.getFullYear()-b.getFullYear();if(n<new Date(n.getFullYear(),b.getMonth(),b.getDate()))a--;return a};
+const req=ids=>ids.map(i=>{const el=$('#'+i);return el.value.trim()?true:bad(el,'This field is required')}).every(Boolean);
+const fmt=d=>d?new Date(d).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'}):'–';
+
+/* live card */
+const upd=()=>{
+  $('#c-name').textContent=$('#name').value.trim()||'Your name here';
+  $('#c-dob').textContent=fmt($('#dob').value);
+  $('#c-blood').textContent=$('#blood').value||'–';
+  $('#c-class').textContent='Class '+($('#class').value.split('|')[0]||'–');
+};
+['name','dob','blood','class'].forEach(i=>$('#'+i).addEventListener('input',upd));
+$('#photo').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{$('#c-photo').style.backgroundImage=`url(${r.result})`;$('#c-photo').textContent=''};r.readAsDataURL(f)};
+
+/* apply wizard */
+let step=1;
+const labels=["Personal details","Contact and license class","Review and submit"];
+function showStep(){
+  $$('.s').forEach(s=>s.hidden=+s.dataset.s!==step);
+  $$('#steps span').forEach((s,i)=>s.classList.toggle('done',i<step));
+  $('#stepLabel').textContent=`Step ${step} of 3: ${labels[step-1]}`;
+  $('#back').hidden=step===1;
+  $('#next').textContent=step===3?'Submit application':'Continue';
+}
+function validate(){
+  if(step===1){
+    let ok=req(['name','dob','gender','blood']);
+    if($('#dob').value&&age($('#dob').value)<16)ok=bad($('#dob'),'You must be at least 16 years old');
+    return ok;
+  }
+  if(step===2){
+    let ok=req(['class','phone','email','addr']);
+    const ph=$('#phone');if(ph.value&&!/^\d{10}$/.test(ph.value.trim()))ok=bad(ph,'Enter a 10-digit mobile number');
+    const em=$('#email');if(em.value&&!/^\S+@\S+\.\S+$/.test(em.value))ok=bad(em,'Enter a valid email address');
+    const c=$('#class').value;if(c&&$('#dob').value&&age($('#dob').value)<+c.split('|')[1])ok=bad($('#class'),`Minimum age for this class is ${c.split('|')[1]}`);
+    return ok;
+  }
+  if(!$('#agree').checked){$('#agreeErr').textContent='Please confirm to continue';return false}
+  $('#agreeErr').textContent='';return true;
+}
+$('#back').onclick=()=>{step--;showStep()};
+$('#next').onclick=()=>{
+  if(!validate())return;
+  if(step===2){
+    const rows=[['Name',$('#name').value],['Date of birth',fmt($('#dob').value)],['Gender',$('#gender').value],['Blood group',$('#blood').value],['License class',$('#class').selectedOptions[0].text],['Mobile',$('#phone').value],['Email',$('#email').value],['Address',$('#addr').value]];
+    $('#review').innerHTML=rows.map(r=>`<div><b>${r[0]}</b>${r[1].replace(/</g,'&lt;')}</div>`).join('');
+  }
+  if(step<3){step++;showStep();return}
+  const id=uid('DL');
+  const apps=store.get('rr_apps');apps.push({id,type:'New license',name:$('#name').value.trim(),created:Date.now()});store.set('rr_apps',apps);
+  $('#c-no').textContent=id.replace(/^DL(\d{4})(\d{4})$/,'DL-$1-$2');
+  $('#appForm').hidden=true;$('.steps').hidden=true;$('#stepLabel').hidden=true;
+  $('#applyRef').textContent=id;$('#applyOk').hidden=false;toast('Application submitted');
+};
+$('#copyRef').onclick=()=>{navigator.clipboard?.writeText($('#applyRef').textContent);toast('Number copied')};
+
+/* renew */
+const rf=()=>$('#rfee').textContent=(+FEES["Renewal (per year)"]*+$('#ryears').value).toLocaleString();
+$('#ryears').onchange=rf;rf();
+$('#renewForm').onsubmit=e=>{
+  e.preventDefault();
+  let ok=req(['rno','rdob']);
+  if($('#rdob').value&&age($('#rdob').value)<16)ok=bad($('#rdob'),'Check the date of birth');
+  if(!ok)return;
+  const id=uid('RN');const a=store.get('rr_apps');a.push({id,type:'Renewal',name:$('#rno').value.trim(),created:Date.now()});store.set('rr_apps',a);
+  $('#renewForm').hidden=true;$('#renewRef').textContent=id;$('#renewOk').hidden=false;toast('Renewal request received');
+};
+
+/* book test */
+const td=$('#tdate'),t=new Date();t.setDate(t.getDate()+1);td.min=t.toISOString().slice(0,10);
+let slot='';
+function drawSlots(){
+  const taken=store.get('rr_book').filter(b=>b.date===td.value&&b.centre===$('#tcentre').value).map(b=>b.slot);
+  slot='';
+  $('#slots').innerHTML=['09:00','09:45','10:30','11:15','12:00','14:00','14:45','15:30','16:15'].map(s=>`<button type="button" aria-pressed="false" ${taken.includes(s)?'disabled':''}>${s}</button>`).join('');
+  $$('#slots button').forEach(b=>b.onclick=()=>{slot=b.textContent;$('#slotErr').textContent='';$$('#slots button').forEach(x=>x.setAttribute('aria-pressed',x===b))});
+}
+td.onchange=drawSlots;$('#tcentre').onchange=drawSlots;drawSlots();
+$('#testForm').onsubmit=e=>{
+  e.preventDefault();
+  let ok=req(['tapp','tdate']);
+  if(ok&&!slot){$('#slotErr').textContent='Choose a time slot';ok=false}
+  if(!ok)return;
+  const b=store.get('rr_book');b.push({date:td.value,centre:$('#tcentre').value,slot});store.set('rr_book',b);
+  $('#testForm').hidden=true;
+  $('#testMsg').textContent=`${fmt(td.value)} at ${slot}, ${$('#tcentre').value}.`;
+  $('#testOk').hidden=false;toast('Driving test booked');
+};
+
+/* track */
+$('#trackForm').onsubmit=e=>{
+  e.preventDefault();
+  const id=$('#tid').value.trim().toUpperCase().replace(/\s/g,''),out=$('#trackOut');
+  const a=store.get('rr_apps').find(x=>x.id===id);
+  if(!a){out.innerHTML='';$('#trackErr').textContent='No application found with that number on this device. Check it and try again.';return}
+  $('#trackErr').textContent='';
+  /* demo: status advances one stage every 20 seconds */
+  const cur=Math.min(STAGES.length-1,Math.floor((Date.now()-a.created)/20000));
+  out.innerHTML=`<h3 style="margin-top:24px;font-size:20px">${a.type}: ${a.name.replace(/</g,'&lt;')}</h3><p class="hint">Submitted ${new Date(a.created).toLocaleString()}</p>
+  <ul class="tl">${STAGES.map((s,i)=>`<li class="${i<cur?'d':i===cur?'c':''}">${s}<small>${i<cur?'Completed':i===cur?(cur===STAGES.length-1?'Current status':'In progress'):'Pending'}</small></li>`).join('')}</ul>
+  <p class="hint">Demo note: status advances automatically every 20 seconds. Connect a real backend for live updates.</p>`;
+};
+
+/* docs checklist */
+const boxes=$$('.docs input');
+boxes.forEach(b=>b.onchange=()=>{const n=boxes.filter(x=>x.checked).length;$('#docBar').style.width=n/boxes.length*100+'%';$('#docTxt').textContent=`${n} of ${boxes.length} ready`});
+
+/* sign in */
+$('#signBtn').onclick=()=>{if($('#signBtn').dataset.in){$('#signBtn').textContent='Sign in';delete $('#signBtn').dataset.in;toast('Signed out')}else $('#dlg').showModal()};
+$('#dlg').onclose=()=>{if($('#dlg').returnValue==='ok'&&$('#sn').value.trim()){$('#signBtn').textContent='Hi, '+$('#sn').value.trim().split(' ')[0]+' · Sign out';$('#signBtn').dataset.in=1;toast('Signed in')}};
+showStep();
+</script>
+</body>
+</html>Get-Content .\templates\index.html -TotalCount 5
